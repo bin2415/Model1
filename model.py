@@ -189,7 +189,7 @@ class Model:
         #Eve_real_loss = tf.reduce_mean(cross_entropy(logits = eve_real, labels = tf.ones_like(eve_real)))
         self.Eve_loss = tf.reduce_mean(utils.Distance(eve_final_fc, self.P, [1]))
 
-        Alice_C_loss = tf.reduce_mean(utils.Distance(self.bob_input, self.data_images, [1,2,3]))
+        Alice_C_loss = tf.reduce_mean(utils.Distance(self.alice_output, self.data_images, [1,2,3]))
         self.Alice_loss = self.conf.alphaA * Alice_C_loss + self.conf.alphaB * self.Bob_loss + self.conf.alphaC * self.Eve_loss
 
         #定义优化器

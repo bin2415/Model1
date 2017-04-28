@@ -217,7 +217,7 @@ class Model:
 
         self.Bob_bit_error = utils.calculate_bit_error(self.P, bob_final_fc, [1])
         self.Alice_bit_error = utils.calculate_bit_error(self.data_images, self.alice_output, [1,2,3])
-        self.Eve_bit_error = utils.calculate_bit_error(self.P, eve_final_fc)
+        self.Eve_bit_error = utils.calculate_bit_error(self.P, eve_final_fc, [1]) 
         #self.Eve_fake_error = tf.reduce_mean(tf.nn.sigmoid(eve_fake))
         #self.Eve_real_error = tf.reduce_mean(tf.nn.sigmoid(eve_real))
 

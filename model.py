@@ -134,7 +134,7 @@ class Model:
 
         #self.bob_input = tf.reshape(alice_conv4, [-1, self.x_weidu, self.y_weidu, self.rgb])
         bob_iamge = tf.reshape(self.alice_output, [self.batch_size, -1])
-        self.bob_input = tf.concat([self.K, bob])
+        self.bob_input = tf.concat([self.K, bob_iamge])
         bob_fc = fc_layer(bob_input, shape = (image_length + N, 8*image_length), name = 'bob/bob_fc')
 
         bob_fc = tf.reshape(bob_fc, [-1, self.x_weidu, self.y_weidu, 8*self.rgb])

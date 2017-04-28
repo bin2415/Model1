@@ -63,14 +63,15 @@ class Model:
         '''
         self.sess = sess
         self.conf = conf
-        #self.P = utils.generate_data(batch_size, N)
+        self.P = utils.generate_data(batch_size, N)
+        self.K = utils.generate_data(batch_size, N)
         self.x_weidu = x_weidu
         self.y_weidu = y_weidu
         self.rgb = rgb_weidu
         self.batch_size = batch_size
         self.data_images = tf.placeholder(tf.float32, [self.batch_size] + list(shape))
-        self.K = tf.placeholder(tf.float32, [self.batch_size, N])
-        self.P = tf.placeholder(tf.float32, [self.batch_size, N])
+        #self.K = tf.placeholder(tf.float32, [self.batch_size, N])
+        #self.P = tf.placeholder(tf.float32, [self.batch_size, N])
         self.N = N
         alice_image = tf.reshape(self.data_images, [batch_size, -1])
         alice_input = tf.concat([alice_image, self.K, self.P], 1)
@@ -279,14 +280,15 @@ class Model:
                 ##self.sess.run(self.alice_step_only, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             #self.sess.run(self.alice_step_only, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
-            #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
-            self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
+            self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
+            #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             #if i > 30000:
             #    self.sess.run(self.bob_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
             #    self.sess.run(self.eve_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
-            self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
-            #self.sess.run(self.eve_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
-            self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
+            #self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
+            self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
+            self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain})
+            #self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             if i % 100 == 0:
                 bit_error, alice_error, eve_error = self.sess.run([self.Bob_bit_error, self.Alice_bit_error, self.Eve_bit_error], 

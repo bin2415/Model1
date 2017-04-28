@@ -291,7 +291,7 @@ class Model:
             if i % 100 == 0:
                 bit_error, alice_error, eve_error = self.sess.run([self.Bob_bit_error, self.Alice_bit_error, self.Eve_bit_error], 
                 feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
-                print("step {}, bob bit error {}, alice bit error {}, Eve bit error{}".format(i, bit_error, alice_error, eve_error))
+                print("step {}, bob bit error {}, alice bit error {}, Eve bit error {}".format(i, bit_error, alice_error, eve_error))
                 bob_results.append(bit_error)
                 alice_results.append(alice_error)
                 #summary_str = self.sess.run(merged_summary_op, feed_dict = {self.data_images: data[ 0: self.batch_size]})

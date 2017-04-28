@@ -163,7 +163,7 @@ class Model:
         #eve_fake = self.discriminator_stego_nn(self.bob_input, batch_size, 'fake')
 
 
-        eve_conv1 = convolution2d(alice_fc, 64, kernel_size = [5, 5], stride = [2,2],
+        eve_conv1 = convolution2d(self.alice_output, 64, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'eve/conv1')
 
         eve_conv2 = convolution2d(eve_conv1, 64 * 2, kernel_size = [5, 5], stride = [2,2],

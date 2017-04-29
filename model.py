@@ -155,7 +155,7 @@ class Model:
 
         bob_conv4 = tf.reshape(bob_conv4, [batch_size, -1])
         bob_final_fc = fully_connected(bob_conv4, N, activation_fn = tf.nn.tanh, normalizer_fn = BatchNorm,
-        weights_initializer=tf.random_normal_initializer(stddev=1.0), scope = 'bob/final_fc')
+        weights_initializer=tf.random_normal_initializer(stddev=0.2), scope = 'bob/final_fc')
         #Bob_loss = tf.reduce_mean(utils.Distance(bob_fc, self.P, [1]))
 
         #Eve网络
@@ -180,7 +180,7 @@ class Model:
         #eve_fc = fully_connected(eve_conv4, 1, activation_fn = tf.nn.sigmoid, normalizer_fn = BatchNorm,
         #weights_initializer=tf.random_normal_initializer(stddev=1.0))
         eve_final_fc = fully_connected(eve_conv4, N, activation_fn = tf.nn.tanh, normalizer_fn = BatchNorm, 
-        weights_initializer=tf.random_normal_initializer(stddev=1.0), scope = 'eve/final_fc')
+        weights_initializer=tf.random_normal_initializer(stddev=0.2), scope = 'eve/final_fc')
 
         #Bob损失函数
         self.Bob_loss = tf.reduce_mean(utils.Distance(bob_final_fc, self.P, [1]))

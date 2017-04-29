@@ -134,14 +134,14 @@ class Model:
 
 
         #self.bob_input = tf.reshape(alice_conv4, [-1, self.x_weidu, self.y_weidu, self.rgb])
-        bob_iamge = tf.reshape(self.alice_output, [self.batch_size, -1])
-        self.bob_input = tf.concat([self.K, bob_iamge],1)
-        bob_fc = fc_layer(self.bob_input, shape = (image_length + N, 8*image_length), name = 'bob/bob_fc')
+        #bob_iamge = tf.reshape(self.alice_output, [self.batch_size, -1])
+        #self.bob_input = tf.concat([self.K, bob_iamge],1)
+        #bob_fc = fc_layer(self.bob_input, shape = (image_length + N, 8*image_length), name = 'bob/bob_fc')
 
-        bob_fc = tf.reshape(bob_fc, [-1, self.x_weidu, self.y_weidu, 8*self.rgb])
+        #bob_fc = tf.reshape(bob_fc, [-1, self.x_weidu, self.y_weidu, 8*self.rgb])
 
         #Bob网络结构
-        bob_conv1 = convolution2d(bob_fc, 64, kernel_size = [5, 5], stride = [2,2],
+        bob_conv1 = convolution2d(self.alice_output, 64, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv1')
 
         bob_conv2 = convolution2d(bob_conv1, 64 * 2, kernel_size = [5, 5], stride = [2,2],
@@ -154,6 +154,9 @@ class Model:
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv4')
 
         bob_conv4 = tf.reshape(bob_conv4, [batch_size, -1])
+
+        bob_conv4 = tf.concat([bob_conv4, self.K], 1)
+        
         bob_final_fc = fully_connected(bob_conv4, N, activation_fn = tf.nn.tanh, normalizer_fn = BatchNorm,
         weights_initializer=tf.random_normal_initializer(stddev=0.2), scope = 'bob/final_fc')
         #Bob_loss = tf.reduce_mean(utils.Distance(bob_fc, self.P, [1]))

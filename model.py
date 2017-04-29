@@ -257,8 +257,8 @@ class Model:
         while(len(data) < self.batch_size):
             data.append(data)
         
-        if len(data) > 4096:
-            data = data[0 : 4096]
+        if len(data) > 1024:
+            data = data[0 : 1024]
 
         lens = len(data)
         input_data = 2*np.random.random_integers(0,1,size = (4096, self.N)) - 1

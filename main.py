@@ -20,6 +20,7 @@ import sys
 
 #alphaA 0.8 alphaB 0.4 alphaC -0.2
 #alphaA 1.2 alphaB 0.6 alphaC -0.2 alice误差60，bob误差0.5
+#alphaA 0.1 alphaB 0.9 alphaC -0.9
 flags = tf.app.flags
 flags.DEFINE_float("alphaA", 0.05, "alphaA的值")
 flags.DEFINE_float("alphaB", 0.95, "alphaB的值")

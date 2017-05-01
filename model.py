@@ -89,7 +89,7 @@ class Model:
 
         #Alice结构
         image_length = self.x_weidu * self.y_weidu * self.rgb
-        alice_fc = fc_layer(alice_input, shape = (image_length + 2*N, image_length*8), name = 'alice/alice_fc')
+        alice_fc = fc_layer(alice_input, shape = (image_length + 2*N, image_length*8), name = 'alice_bob/alice/alice_fc')
         #alice_fc = tf.reshape(alice_fc, [batch_size, 2 * image_length, 1])
         #alice_conv1 = conv_layer(alice_fc, filter_shape = [4,1,2], stride = 1, sigmoid = True, name = 'alice/alice_conv1')
         #alice_conv2 = conv_layer(alice_conv1, filter_shape = [2,2,4], stride = 2, sigmoid = True, name = 'alice/alice_conv2')
@@ -100,11 +100,11 @@ class Model:
         alice_fc = self.a_bn0(alice_fc, train = True)
         aclie_fc = tf.nn.relu(alice_fc)
 
-        alice_conv1 = self.conv2d_transpose(alice_fc, [self.batch_size, self.x_weidu*2, self.y_weidu*2, self.rgb * 4], name = 'alice/conv1')
+        alice_conv1 = self.conv2d_transpose(alice_fc, [self.batch_size, self.x_weidu*2, self.y_weidu*2, self.rgb * 4], name = 'alice_bob/alice/conv1')
         alice_conv1 = self.a_bn1(alice_conv1, train = True)
         alice_conv1 = tf.nn.relu(alice_conv1)
 
-        alice_conv2 = self.conv2d_transpose(alice_conv1, [self.batch_size, self.x_weidu * 4, self.y_weidu * 4, self.rgb * 2], name = 'alice/conv2')
+        alice_conv2 = self.conv2d_transpose(alice_conv1, [self.batch_size, self.x_weidu * 4, self.y_weidu * 4, self.rgb * 2], name = 'alice_bob/alice/conv2')
         alice_conv2 = self.a_bn2(alice_conv2, train = True)
         alice_conv2 = tf.nn.relu(alice_conv2)
 
@@ -112,15 +112,15 @@ class Model:
         #alice_conv3 = self.g_bn3(alice_conv3, train = True)
         #alice_conv3 = tf.nn.relu(alice_conv3)
 
-        alice_conv4 = self.conv2d(alice_conv2, self.rgb * 4, name = 'alice/conv4')
+        alice_conv4 = self.conv2d(alice_conv2, self.rgb * 4, name = 'alice_bob/alice/conv4')
         alice_conv4 = self.a_bn3(alice_conv4, train = True)
         alice_conv4 = tf.nn.relu(alice_conv4)
 
-        alice_conv5 = self.conv2d(alice_conv4, self.rgb * 8, name = 'alice/conv5')
+        alice_conv5 = self.conv2d(alice_conv4, self.rgb * 8, name = 'alice_bob/alice/conv5')
         alice_conv5 = self.a_bn4(alice_conv5, train = True)
         alice_conv5 = tf.nn.relu(alice_conv5)
 
-        alice_conv6 = self.conv2d(alice_conv5, self.rgb, d_h = 1, d_w = 1, name = 'alice/conv6')
+        alice_conv6 = self.conv2d(alice_conv5, self.rgb, d_h = 1, d_w = 1, name = 'alice_bob/alice/conv6')
         #alice_conv6 = self.g_bn3(alice_conv6, train = True)
         alice_conv6 = tf.nn.tanh(alice_conv6)
 
@@ -142,23 +142,23 @@ class Model:
 
         #Bob网络结构
         bob_conv1 = convolution2d(self.alice_output, 64, kernel_size = [5, 5], stride = [2,2],
-        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv1')
+        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'alice_bob/bob/conv1')
 
         bob_conv2 = convolution2d(bob_conv1, 64 * 2, kernel_size = [5, 5], stride = [2,2],
-        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv2')
+        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'alice_bob/bob/conv2')
 
         bob_conv3 = convolution2d(bob_conv2, 64 * 4, kernel_size = [5, 5], stride = [2,2],
-        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv3')
+        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'alice_bob/bob/conv3')
 
         bob_conv4 = convolution2d(bob_conv3, 64 * 8,kernel_size = [5, 5], stride = [2,2],
-        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv4')
+        activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'alice_bob/bob/conv4')
 
         bob_conv4 = tf.reshape(bob_conv4, [batch_size, -1])
 
         bob_conv4 = tf.concat([bob_conv4, self.K], 1)
         
         bob_final_fc = fully_connected(bob_conv4, N, activation_fn = tf.nn.tanh, normalizer_fn = BatchNorm,
-        weights_initializer=tf.random_normal_initializer(stddev=0.2), scope = 'bob/final_fc')
+        weights_initializer=tf.random_normal_initializer(stddev=0.2), scope = 'alice_bob/bob/final_fc')
         #Bob_loss = tf.reduce_mean(utils.Distance(bob_fc, self.P, [1]))
 
         #Eve网络
@@ -192,9 +192,11 @@ class Model:
         #Eve_fake_loss = tf.reduce_mean(cross_entropy(logits = eve_fake, labels = tf.zeros_like(eve_fake)))
         #Eve_real_loss = tf.reduce_mean(cross_entropy(logits = eve_real, labels = tf.ones_like(eve_real)))
         self.Eve_loss = tf.reduce_mean(utils.Distance(eve_final_fc, self.P, [1]))
+        self.Bob_Eve_loss = self.Bob_loss - self.Eve_loss
 
         Alice_C_loss = tf.reduce_mean(utils.Distance(self.alice_output, self.data_images, [1,2,3]))
-        self.Alice_loss = self.conf.alphaA * Alice_C_loss + self.conf.alphaB * self.Bob_loss + self.conf.alphaC * self.Eve_loss
+        #self.Alice_loss = self.conf.alphaA * Alice_C_loss + self.conf.alphaB * self.Bob_loss + self.conf.alphaC * self.Eve_loss
+        self.Alice_loss = Alice_C_loss
 
         #定义优化器
         optimizer1 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
@@ -203,8 +205,8 @@ class Model:
         #optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate)
         
         #获取变量列表
-        self.Alice_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice/")
-        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'bob/')
+        self.Alice_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice_bob/alice/")
+        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/')
         self.Eve_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'eve/')
         print(self.Bob_vars)
 
@@ -283,7 +285,7 @@ class Model:
                 ##self.sess.run(self.alice_step_only, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             #self.sess.run(self.alice_step_only, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
-            self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
+            #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
             self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             #if i > 30000:

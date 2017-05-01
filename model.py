@@ -212,7 +212,7 @@ class Model:
 
         #定义trainning step
         self.alice_step = optimizer1.minimize(self.Alice_loss, var_list= self.Alice_vars)
-        self.bob_step = optimizer2.minimize(self.Bob_loss, var_list= self.Bob_vars)
+        self.bob_step = optimizer2.minimize(self.Bob_Eve_loss, var_list= self.Bob_vars)
         self.eve_step = optimizer3.minimize(self.Eve_loss, var_list= self.Eve_vars)
         #self.alice_step_only = optimizer4.minimize(Alice_C_loss, var_list= self.Alice_vars)
 
@@ -293,7 +293,7 @@ class Model:
             #    self.sess.run(self.eve_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
             #self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
-            self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
+            #self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
             self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain})
             #self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: data[ 0: self.batch_size]})

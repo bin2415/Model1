@@ -202,7 +202,7 @@ class Model:
         optimizer1 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
         optimizer2 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
         optimizer3 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
-        optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.bata1)
+        optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
         #optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate)
         
         #获取变量列表

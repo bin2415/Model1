@@ -206,7 +206,7 @@ class Model:
         
         #获取变量列表
         self.Alice_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice_bob/alice/")
-        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/bob/')
+        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/')
         self.Eve_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'eve/')
         print(self.Bob_vars)
 
@@ -256,7 +256,7 @@ class Model:
         #merged_summary_op = tf.summary.merge_all()
         #summary_writer = tf.summary.FileWriter('./logs', self.sess.graph)
         self.sess.run(tf.global_variables_initializer())
-        bob_results = []
+        bob_results = [] 
         alice_results = []
 
         while(len(data) < self.batch_size):

@@ -202,18 +202,21 @@ class Model:
         optimizer1 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
         optimizer2 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
         optimizer3 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.beta1)
+        optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate, beta1=self.conf.bata1)
         #optimizer4 = tf.train.AdamOptimizer(self.conf.learning_rate)
         
         #获取变量列表
         self.Alice_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice_bob/alice/")
-        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/')
+        self.Bob_eve_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/')
+        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice_bob/bob/")
         self.Eve_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'eve/')
         print(self.Bob_vars)
 
         #定义trainning step
         self.alice_step = optimizer1.minimize(self.Alice_loss, var_list= self.Alice_vars)
-        self.bob_step = optimizer2.minimize(self.Bob_Eve_loss, var_list= self.Bob_vars)
+        self.bob_eve_step = optimizer2.minimize(self.Bob_Eve_loss, var_list= self.Bob_eve_vars)
         self.eve_step = optimizer3.minimize(self.Eve_loss, var_list= self.Eve_vars)
+        self.bob_step = optimizer4.minimize(self.Bob_loss, var_list=self.Bob_vars)
         #self.alice_step_only = optimizer4.minimize(Alice_C_loss, var_list= self.Alice_vars)
 
         #定义Saver
@@ -292,10 +295,11 @@ class Model:
             #    self.sess.run(self.bob_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
             #    self.sess.run(self.eve_step, feed_dict= {self.data_images: data[0 : self.batch_size]})
             #self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
-            self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
+            
             self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
             #self.sess.run(self.bob_step, feed_dict= {self.data_images: dataTrain})
             self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain})
+            self.sess.run(self.bob_eve_step, feed_dict= {self.data_images: dataTrain})
             #self.sess.run(self.eve_step, feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             if i % 100 == 0:

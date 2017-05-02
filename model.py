@@ -206,7 +206,7 @@ class Model:
         
         #获取变量列表
         self.Alice_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, "alice_bob/alice/")
-        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/')
+        self.Bob_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'alice_bob/bob/')
         self.Eve_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'eve/')
         print(self.Bob_vars)
 

@@ -141,16 +141,16 @@ class Model:
         #bob_fc = tf.reshape(bob_fc, [-1, self.x_weidu, self.y_weidu, 8*self.rgb])
 
         #Bob网络结构
-        bob_conv1 = convolution2d(self.alice_output, 64, kernel_size = [5, 5], stride = [2,2],
+        bob_conv1 = convolution2d(self.alice_output, 128, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv1')
 
-        bob_conv2 = convolution2d(bob_conv1, 64 * 2, kernel_size = [5, 5], stride = [2,2],
+        bob_conv2 = convolution2d(bob_conv1, 128 * 2, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv2')
 
-        bob_conv3 = convolution2d(bob_conv2, 64 * 4, kernel_size = [5, 5], stride = [2,2],
+        bob_conv3 = convolution2d(bob_conv2, 128 * 4, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv3')
 
-        bob_conv4 = convolution2d(bob_conv3, 64 * 8,kernel_size = [5, 5], stride = [2,2],
+        bob_conv4 = convolution2d(bob_conv3, 128 * 8,kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'bob/conv4')
 
         bob_conv4 = tf.reshape(bob_conv4, [batch_size, -1])
@@ -166,16 +166,16 @@ class Model:
         #eve_fake = self.discriminator_stego_nn(self.bob_input, batch_size, 'fake')
 
 
-        eve_conv1 = convolution2d(self.alice_output, 64, kernel_size = [5, 5], stride = [2,2],
+        eve_conv1 = convolution2d(self.alice_output, 128, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'eve/conv1')
 
-        eve_conv2 = convolution2d(eve_conv1, 64 * 2, kernel_size = [5, 5], stride = [2,2],
+        eve_conv2 = convolution2d(eve_conv1, 128 * 2, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'eve/conv2')
 
-        eve_conv3 = convolution2d(eve_conv2, 64 * 4,kernel_size = [5, 5], stride = [2,2],
+        eve_conv3 = convolution2d(eve_conv2, 128 * 4,kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'eve/conv3')
 
-        eve_conv4 = convolution2d(eve_conv3, 64* 8, kernel_size = [5, 5], stride = [2,2],
+        eve_conv4 = convolution2d(eve_conv3, 128 * 8, kernel_size = [5, 5], stride = [2,2],
         activation_fn= tf.nn.relu, normalizer_fn = BatchNorm, scope = 'eve/conv4')
 
         eve_conv4 = tf.reshape(eve_conv4, [batch_size, -1])

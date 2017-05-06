@@ -52,7 +52,7 @@ class batch_norm(object):
 
 
 class Model:
-    def __init__(self, sess, conf, N, batch_size, learning_rate, x_weidu = 24, y_weidu = 24, rgb_weidu = 3, shape = (24, 24, 3)):
+    def __init__(self, sess, conf, N, batch_size, learning_rate, x_weidu = 32, y_weidu = 32, rgb_weidu = 3, shape = (32, 32, 3)):
         '''
         sess:tensorflow的Session()会话
         N:明文的长度
@@ -64,7 +64,7 @@ class Model:
         self.sess = sess
         self.conf = conf
         self.P = utils.generate_data(batch_size, N)
-        self.K = utils.generate_data(batch_size, 128)
+        self.K = utils.generate_data(batch_size, N)
         self.x_weidu = x_weidu
         self.y_weidu = y_weidu
         self.rgb = rgb_weidu
@@ -89,7 +89,7 @@ class Model:
 
         #Alice结构
         image_length = self.x_weidu * self.y_weidu * self.rgb
-        alice_fc = fc_layer(alice_input, shape = (image_length + N + 128, image_length*8), name = 'alice_bob/alice/alice_fc')
+        alice_fc = fc_layer(alice_input, shape = (image_length + 2*N, image_length*8), name = 'alice_bob/alice/alice_fc')
         #alice_fc = tf.reshape(alice_fc, [batch_size, 2 * image_length, 1])
         #alice_conv1 = conv_layer(alice_fc, filter_shape = [4,1,2], stride = 1, sigmoid = True, name = 'alice/alice_conv1')
         #alice_conv2 = conv_layer(alice_conv1, filter_shape = [2,2,4], stride = 2, sigmoid = True, name = 'alice/alice_conv2')
@@ -298,7 +298,7 @@ class Model:
             #self.sess.run(self.alice_step, feed_dict = {self.data_images: data[ 0: self.batch_size]})
             if i % 100 == 0:
                 bit_error, alice_error, eve_error = self.sess.run([self.Bob_bit_error, self.Alice_bit_error, self.Eve_bit_error], 
-                feed_dict= {self.data_images: dataTrain, self.P:input_data1, self.K:input_K1})
+                feed_dict= {self.data_images: dataTrain})
                 print("step {}, bob bit error {}, alice bit error {}, Eve bit error {}".format(i, bit_error, alice_error, eve_error))
                 bob_results.append(bit_error)
                 alice_results.append(alice_error)

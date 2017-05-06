@@ -52,7 +52,7 @@ class batch_norm(object):
 
 
 class Model:
-    def __init__(self, sess, conf, N, batch_size, learning_rate, x_weidu = 32, y_weidu = 32, rgb_weidu = 3, shape = (32, 32, 3)):
+    def __init__(self, sess, conf, N, batch_size, learning_rate, x_weidu = 16, y_weidu = 16, rgb_weidu = 3, shape = (16, 16, 3)):
         '''
         sess:tensorflow的Session()会话
         N:明文的长度
@@ -64,7 +64,7 @@ class Model:
         self.sess = sess
         self.conf = conf
         self.P = utils.generate_data(batch_size, N)
-        self.K = utils.generate_data(batch_size, N)
+        self.K = utils.generate_data(batch_size, 128)
         self.x_weidu = x_weidu
         self.y_weidu = y_weidu
         self.rgb = rgb_weidu

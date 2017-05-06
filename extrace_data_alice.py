@@ -1,6 +1,6 @@
 import re
 import matplotlib.pyplot as plt
-fileName = "best_bob90.log"
+fileName = "best_bob_eve_110.log"
 f = open(fileName,'r')
 data = list()
 for line in f.readlines():

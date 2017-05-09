@@ -50,7 +50,7 @@ class batch_norm(object):
 
         return normed
 
-
+##alice
 class Model:
     def __init__(self, sess, conf, N, batch_size, learning_rate, x_weidu = 24, y_weidu = 24, rgb_weidu = 3, shape = (24, 24, 3)):
         '''
